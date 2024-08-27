@@ -1,45 +1,77 @@
-import { useContext, useState } from "react";
+import { useContext, useMemo, useState } from "react";
 import { TodoContext } from "../context/TodoContext";
+import { useLocation } from "react-router-dom";
 
 export const useTodoContext = () => {
-  const { todoList, removeToTodo, setToTodoState, addToTodo } =
-    useContext(TodoContext);
+  const {
+    todoList,
+    removeToTodo,
+    setToTodoState,
+    addToTodo,
+    removeCompletedTodo,
+    checkedAllTodo,
+  } = useContext(TodoContext);
   const [todo, setTodo] = useState("");
+  const [todoActive, setTodoActive] = useState({});
+  const location = useLocation();
+
+  const todoListActive = useMemo(() => {
+    return todoList.filter((el) => !el.completed);
+  }, [todoList]);
+
+  const todoListFiltered = useMemo(() => {
+    if (location.pathname === "/") return todoList;
+    if (location.pathname === "/active")
+      return todoList.filter((el) => !el.completed);
+    return todoList.filter((el) => el.completed);
+  }, [location, todoList]);
 
   const handleTodo = (e) => {
     setTodo(e.target.value);
   };
 
+  const handleTodoActive = (todo) => {
+    setTodoActive(todo);
+  };
+
+  const handleChecked = (e, todo) => {
+    setToTodoState({ ...todo, completed: e.target.checked });
+  };
+
   const handleSubmit = (e, currentTodo = null) => {
     e.preventDefault();
+    const trimmedTodo = todo.trim();
 
-    if (todo && todo.trim().length > 0) {
-      if (currentTodo) {
-        addToTodo({
-          ...currentTodo,
-          text: todo.trim(),
-        });
-      } else {
-        const newTodo = {
-          completed: false,
-          text: todo.trim(),
-        };
-        addToTodo(newTodo);
-      }
-
+    if (trimmedTodo.length > 0) {
+      const newTodo = currentTodo
+        ? {
+            ...currentTodo,
+            text: todo.trim(),
+          }
+        : {
+            completed: false,
+            text: todo.trim(),
+          };
+      addToTodo(newTodo);
       setTodo("");
     }
   };
 
+  const isTodoEmpty = todoList.length === 0;
+
   return {
-    todoList,
+    todoListFiltered,
     removeToTodo,
     setToTodoState,
+    handleTodoActive,
     handleTodo,
     handleSubmit,
-
+    handleChecked,
+    todoActive,
+    todoListActive,
+    removeCompletedTodo,
+    checkedAllTodo,
     todo,
-
-    isTodoEmpty: todoList.length !== 0 ? false : true,
+    isTodoEmpty,
   };
 };

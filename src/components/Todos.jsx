@@ -1,25 +1,20 @@
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import { useTodoContext } from "../hooks/useTodoContext";
 
 export const Todos = () => {
   const {
-    todoList,
     removeToTodo,
     isTodoEmpty,
-    setToTodoState,
+    todoActive,
+    handleTodoActive,
+    handleChecked,
     handleTodo,
     handleSubmit,
+    todoListFiltered,
+    checkedAllTodo,
   } = useTodoContext();
+
   const inputRef = useRef();
-  const [todoActive, setTodoActive] = useState({});
-
-  const handleChecked = (e, todo) => {
-    setToTodoState({ ...todo, completed: e.target.checked });
-  };
-
-  const handleTodoActive = (todo) => {
-    setTodoActive(todo);
-  };
 
   const handleTodoUpdate = (e, todo) => {
     inputRef.current.blur();
@@ -29,19 +24,23 @@ export const Todos = () => {
   return (
     <section className="main">
       <input id="toggle-all" className="toggle-all" type="checkbox" />
-      {!isTodoEmpty && <label htmlFor="toggle-all">Mark all as complete</label>}
+      {!isTodoEmpty && (
+        <label htmlFor="toggle-all" onClick={checkedAllTodo}>
+          Mark all as complete
+        </label>
+      )}
       <ul className="todo-list">
         {/* <!-- These are here just to show the structure of the list items -->
         <!-- List items should get the className `editing` when editing and `completed` when marked as completed --> */}
 
-        {todoList.map((todo) => (
+        {todoListFiltered.map((todo) => (
           <li
             className={
               todoActive.id === todo.id
                 ? "editing"
                 : todo.completed
                 ? "completed"
-                : ""
+                : undefined
             }
             key={todo.id}
           >
@@ -49,7 +48,9 @@ export const Todos = () => {
               <input
                 className="toggle"
                 onClick={(e) => handleChecked(e, todo)}
+                checked={todo.completed}
                 type="checkbox"
+                readOnly
                 defaultValue="check"
               />
               <label onDoubleClick={() => handleTodoActive(todo)}>

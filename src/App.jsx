@@ -1,4 +1,4 @@
-import { TodoFooter, Header, Todos, Footer } from "./assets/components/index"
+import { TodoFooter, Header, Todos, Footer } from "./components/index"
 
 function App() {
   return (

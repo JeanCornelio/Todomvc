@@ -1,9 +1,10 @@
 
-import { useAddTodo } from "../hooks/useAddTodo";
+
+import { useTodoContext } from "../hooks/useTodoContext";
 
 
 export const Header = () => {
-   const  {handleSubmit, handleTodo, todo} = useAddTodo()
+   const  {handleSubmit, handleTodo, todo} = useTodoContext()
 
   return (
     <header className="header">
@@ -13,6 +14,7 @@ export const Header = () => {
         className="new-todo"
         placeholder="What needs to be done?"
         value={todo}
+       
         onChange={handleTodo}
         autoFocus
       />

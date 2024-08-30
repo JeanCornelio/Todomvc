@@ -1,11 +1,15 @@
 import { useTodoContext } from "../hooks/useTodoContext";
+import { motion } from "framer-motion";
+
 
 export const Header = () => {
   const { handleSubmit, handleTodo, todo } = useTodoContext();
 
   return (
     <header className="header">
-      <h1>todos</h1>
+      <motion.h1 initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{duration:1, type:'spring'}}>
+        todos
+      </motion.h1>
       <form onSubmit={handleSubmit}>
         <input
           className="new-todo"

@@ -2,7 +2,38 @@ import { createContext, useReducer } from "react";
 
 export const TodoContext = createContext();
 
-const initialState = [];
+const initialState = [
+  {
+    id:2342342324,
+    text: 'React Hooks',
+    completed: false,
+  },
+  {
+    id:2342343334e234,
+    text: 'Context',
+    completed: true,
+  },
+  {
+    id:234232434234,
+    text: 'React Is the best framework',
+    completed: false,
+  },
+  {
+    id:234234333454e234,
+    text: 'Learn Farmer motion',
+    completed: true,
+  },
+  {
+    id:2342356564234,
+    text: 'Make money',
+    completed: false,
+  },
+  {
+    id:2342343343453234,
+    text: 'Enjoi your life ',
+    completed: true,
+  },
+];
 
 const todoTypes = {
   ADD_TODO: "ADD_TODO",
@@ -10,6 +41,7 @@ const todoTypes = {
   SET_STATE_TODO: "SET_STATE_TODO",
   REMOVE_COMPLETED_TODO: "REMOVE_COMPLETED_TODO",
   CHECKED_ALL_TODO: "CHECKED_ALL_TODO",
+  SET_TODOS: "SET_TODOS",
 };
 
 const todoReducer = (state, action) => {
@@ -35,7 +67,7 @@ const todoReducer = (state, action) => {
         text: payload.text,
       };
 
-      return [...state, newTodo];
+      return [newTodo,...state ];
     }
     case todoTypes.REMOVE_TODO: {
       const todoListWithoutTodo = todoListCopy.filter(
@@ -68,6 +100,10 @@ const todoReducer = (state, action) => {
       });
       return checkedAllTodoList;
     }
+    case todoTypes.SET_TODOS: {
+      const newTodos = payload
+      return newTodos;
+    }
   }
   return state;
 };
@@ -97,6 +133,11 @@ export const TodoProvider = ({ children }) => {
     dispatch({
       type: "CHECKED_ALL_TODO",
     });
+  const setTodos = (todos) =>
+    dispatch({
+      type: "SET_TODOS",
+      payload: todos
+    });
 
   return (
     <TodoContext.Provider
@@ -107,6 +148,7 @@ export const TodoProvider = ({ children }) => {
         setToTodoState,
         removeCompletedTodo,
         checkedAllTodo,
+        setTodos
       }}
     >
       {children}

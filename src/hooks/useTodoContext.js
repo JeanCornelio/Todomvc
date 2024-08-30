@@ -10,6 +10,7 @@ export const useTodoContext = () => {
     addToTodo,
     removeCompletedTodo,
     checkedAllTodo,
+    setTodos,
   } = useContext(TodoContext);
   const [todo, setTodo] = useState("");
   const [todoActive, setTodoActive] = useState({});
@@ -23,7 +24,7 @@ export const useTodoContext = () => {
     if (location.pathname === "/") return todoList;
     if (location.pathname === "/active")
       return todoList.filter((el) => !el.completed);
-    return todoList.filter((el) => el.completed);
+      return todoList.filter((el) => el.completed);
   }, [location, todoList]);
 
   const handleTodo = (e) => {
@@ -72,6 +73,7 @@ export const useTodoContext = () => {
     removeCompletedTodo,
     checkedAllTodo,
     todo,
+    setTodos,
     isTodoEmpty,
   };
 };
